@@ -56,7 +56,7 @@ def delete_local_files(files: List[str]) -> None:
             print(f"'{file}' was deleted from the local folder.")
         except Exception as e:
             print(f"Error deleting file '{file}': {e}")
-            
+
 def execute_backup(folder: str) -> None:
     try:
         print(f"Iniciando o processo de backup para a pasta '{folder}'...")
@@ -73,7 +73,7 @@ def execute_backup(folder: str) -> None:
 
 
 if __name__ == '__main__':
-    LOCAL_FOLDER: str = 'download'
+    LOCAL_FOLDER: str = 'download' #your folder 
     try:
         execute_backup(LOCAL_FOLDER)
     except Exception as e:
