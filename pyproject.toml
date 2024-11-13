@@ -1,0 +1,15 @@
+[tool.poetry]
+name = "etl-backup-cloud"
+version = "0.1.0"
+description = ""
+authors = ["Caio Machado <moliveiracaio@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+boto3 = "^1.35.59"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
