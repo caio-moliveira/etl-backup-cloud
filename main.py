@@ -13,13 +13,17 @@ AWS_REGION = os.getenv('AWS_REGION')
 BUCKET_NAME = os.getenv('BUCKET_NAME')
 
 # Configure S3 Client
-s3_client = boto3.client(
-    's3',
-    aws_access_key_id=AWS_ACCESS_KEY_ID,
-    aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
-    region_name=AWS_REGION
-)
-print("S3 client configured successfully.")
+try:
+    s3_client = boto3.client(
+        's3',
+        aws_access_key_id=AWS_ACCESS_KEY_ID,
+        aws_secret_access_key=AWS_SECRET_ACCESS_KEY,
+        region_name=AWS_REGION
+    )
+    print("S3 client configured successfully.")
+except Exception as e:
+    print(f"Error configuring S3 client: {e}")
+
 
 def list_files(folder: str) -> List[str]:
     files = []
@@ -28,7 +32,7 @@ def list_files(folder: str) -> List[str]:
             path_complete = os.path.join(folder, file_name)
             if os.path.isfile(path_complete):
                 files.append(path_complete)
-        print(f"Files listed in folder '{folder}': {files}")
+        print(f"Files found: {files}")
     except Exception as e:
         print(f"Error listing files in folder '{folder}': {e}")
         raise
@@ -44,6 +48,7 @@ def upload_files_to_s3(files: List[str]) -> None:
         except Exception as e:
             print(f"Error uploading '{file_name}' to S3: {e}")
 
+
 def delete_local_files(files: List[str]) -> None:
     for file in files:
         try:
@@ -51,10 +56,11 @@ def delete_local_files(files: List[str]) -> None:
             print(f"'{file}' was deleted from the local folder.")
         except Exception as e:
             print(f"Error deleting file '{file}': {e}")
-
+            
 def execute_backup(folder: str) -> None:
     try:
-        files = list_files(folder)
+        print(f"Iniciando o processo de backup para a pasta '{folder}'...")
+        files: List[str] = list_files(folder)
         if files:
             upload_files_to_s3(files)
             delete_local_files(files)
@@ -64,8 +70,10 @@ def execute_backup(folder: str) -> None:
         print(f"Error processing backup: {e}")
         raise
 
+
+
 if __name__ == '__main__':
-    LOCAL_FOLDER = 'download'
+    LOCAL_FOLDER: str = 'download'
     try:
         execute_backup(LOCAL_FOLDER)
     except Exception as e:
